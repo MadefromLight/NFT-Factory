@@ -64,8 +64,9 @@ const MarketPlace: React.FC = () => {
     // Also fetch live marketplace data
     const fetchLiveMarketData = async () => {
       try {
-        // Fetch live data from the Next.js API route
-        const response = await fetch('/api/marketplace/trending');
+        // Fetch live data from the backend API directly
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://server-pybzfe3u6-madefromlights-projects.vercel.app';
+        const response = await fetch(`${backendUrl}/v1/marketplace/trending`);
         const data = await response.json();
         
         console.log("Fetched live marketplace data:", data);

@@ -10,6 +10,7 @@ import logger from './utils/logger';
 import submissionRoutes from './routes/submissionRoutes';
 import adminRoutes from './routes/adminRoutes';
 import { startMintWorker } from './workers/mintWorker';
+import initializeSuperAdmin from './scripts/initializeSuperAdmin';
 
 // Load environment variables
 dotenv.config();
@@ -80,6 +81,9 @@ const startServer = async () => {
   try {
     // Connect to database
     await connectDB();
+
+    // Initialize super admin
+    await initializeSuperAdmin();
 
     // Start mint worker
     startMintWorker();

@@ -233,8 +233,9 @@ const Details = () => {
   useEffect(() => {
     const fetchLiveData = async () => {
       try {
-        // Fetch live data from the Next.js API route
-        const response = await fetch(`/api/marketplace/collections/stats?contractAddress=${cAddress}`);
+        // Fetch live data from the backend API directly
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://server-pybzfe3u6-madefromlights-projects.vercel.app';
+        const response = await fetch(`${backendUrl}/v1/marketplace/collections/${cAddress}/stats`);
         const data = await response.json();
         
         // Use the actual response data if available, otherwise fallback

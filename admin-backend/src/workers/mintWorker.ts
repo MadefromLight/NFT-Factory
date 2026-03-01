@@ -1,5 +1,4 @@
 import cron from 'node-cron';
-import Submission from '../models/Submission';
 import blockchainService from '../services/blockchainService';
 import logger from '../utils/logger';
 
@@ -13,6 +12,9 @@ export const startMintWorker = () => {
     logger.info('Mint worker: Checking for submissions ready to mint...');
 
     try {
+      // Dynamically import models
+      const Submission = (await import('../models/Submission')).default;
+      
       // Find all submissions ready for mint
       const submissions = await Submission.find({
         status: 'READY_FOR_MINT',
@@ -62,6 +64,9 @@ export const startMintWorker = () => {
 
 // Manual mint function for testing or admin use
 export const mintSubmission = async (submissionId: string) => {
+  // Dynamically import models
+  const Submission = (await import('../models/Submission')).default;
+  
   const submission = await Submission.findById(submissionId);
 
   if (!submission) {

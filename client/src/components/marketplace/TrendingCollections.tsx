@@ -23,8 +23,9 @@ const TrendingCollection = ({ collections, owners, names, images }: Props) => {
       for (let i = 0; i < collections.length; i++) {
         const { mintFee, index } = collections[i];
         try {
-          // Fetch live data from the Next.js API route
-          const response = await axios.get(`/api/marketplace/collections/stats`);
+          // Fetch live data from the backend API directly
+          const backendUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://server-pybzfe3u6-madefromlights-projects.vercel.app';
+          const response = await axios.get(`${backendUrl}/v1/marketplace/collections/stats`);
           
           // Find the matching collection stats
           const contractAddress = ""; // This would come from your collections data
