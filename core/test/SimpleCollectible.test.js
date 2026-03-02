@@ -82,7 +82,7 @@ describe("SimpleCollectible Contract", function () {
         nft.connect(addr1).createCollectible(addr1.address, uriIndex, { value: mintFee })
       )
         .to.emit(nft, "CollectibleCreated")
-        .withArgs(addr1.address, uriIndex, 0);
+        .withArgs(addr1.address, uriIndex, 0, mintFee);
       
       expect(await nft.ownerOf(0)).to.equal(addr1.address);
       expect(await nft.tokenURI(0)).to.equal(URIs[uriIndex]);
@@ -143,7 +143,7 @@ describe("SimpleCollectible Contract", function () {
     it("Should allow owner to initiate redemption", async function () {
       await expect(nft.connect(addr1).redeem(0, 0))
         .to.emit(nft, "RedeemInitiated")
-        .withArgs(0, addr1.address);
+        .withArgs(0, addr1.address, 0);
       
       // Token should be transferred to contract
       expect(await nft.ownerOf(0)).to.equal(nft.address);
@@ -216,7 +216,9 @@ describe("SimpleCollectible Contract", function () {
 
     it("Should allow owner to set custom royalty", async function () {
       const customBps = 500; // 5%
-      await nft.setCustomRoyalty(addr1.address, customBps);
+      await expect(nft.setCustomRoyalty(0, addr1.address, customBps))
+        .to.emit(nft, "CustomRoyaltySet")
+        .withArgs(addr1.address, customBps);
       
       const salePrice = ethers.utils.parseEther("1");
       const [receiver, royaltyAmount] = await nft.royaltyInfo(0, salePrice);
@@ -227,7 +229,7 @@ describe("SimpleCollectible Contract", function () {
 
     it("Should enforce max royalty limit", async function () {
       const tooHighBps = 5001; // 50.01%
-      await expect(nft.setCustomRoyalty(addr1.address, tooHighBps)).to.be.revertedWithCustomError(
+      await expect(nft.setCustomRoyalty(0, addr1.address, tooHighBps)).to.be.revertedWithCustomError(
         nft,
         "RoyaltyTooHigh"
       );

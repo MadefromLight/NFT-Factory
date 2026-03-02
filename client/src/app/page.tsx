@@ -1,6 +1,6 @@
 "use client"; 
 
-import DashboardLayout from "@/layout/DashboardLayout";
+import CommerceLayout from "@/layout/CommerceLayout";
 import { setWalletAddress, setWalletConnected } from "@/reducers/userSlice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -20,7 +20,7 @@ export default function Home() {
   
   return (
     <>
-      <DashboardLayout />
+      <CommerceLayout />
     </>
   );
 }

@@ -1,6 +1,6 @@
-# NFT Factory - Enhanced Platform
+# NFT Factory - Web3 Commerce Infrastructure Platform
 
-## Welcome to the NFT Factory platform by Zeus Labs - Democratizing Access to Financial Assets!
+## Welcome to the NFT Factory Web3 Commerce Platform by Zeus Labs - Empowering MSMEs in the Decentralized Economy!
 
 <p align="center" width="100%">
   <img src="https://github.com/BukiOffor/Nft-assets/assets/58889001/7605392b-51ae-4e2d-825d-4fae2acbcec0" alt="site"/>
@@ -27,7 +27,7 @@
 #
 > ## Overview
 <p align="justify">
-NFT Factory is a groundbreaking project by Zeus Labs aimed at democratizing access to financial assets by tokenizing real-world assets seamlessly on the Base Sepolia testnet. This repository contains the enhanced platform of the NFT Factory, providing advanced features for creating, managing, and trading NFTs representing real-world assets. The platform now includes an admin panel, launchpad functionality, and improved smart contracts with upgrade capabilities. Mainnet deployment coming soon.
+NFT Factory has evolved into a comprehensive Web3 Commerce Infrastructure platform designed specifically for Micro, Small, and Medium Enterprises (MSMEs). This platform transforms traditional business models by enabling merchants to create digital products, manage inventory, process secure transactions, and build trust through blockchain verification. Built on the Base network with advanced escrow mechanisms, redemption systems, and merchant verification, NFT Factory provides everything businesses need to thrive in the decentralized economy.
 </p>
 
 
@@ -35,35 +35,43 @@ NFT Factory is a groundbreaking project by Zeus Labs aimed at democratizing acce
 #
 > ## Core Features Implemented
 
-`Deployment on Base Sepolia`
-- Current deployment on Base Sepolia testnet
-- Mainnet deployment coming soon
+`Web3 Commerce Infrastructure`
+- Complete merchant dashboard with analytics and inventory management
+- Advanced escrow system for buyer protection
+- Redemption mechanisms with burn-to-soulbound conversion
+- Merchant verification and trust scoring system
+- Multi-tier subscription model for businesses
 
-`Enhanced Asset Tokenization`
-- Database for storage purpose
-- Admins create NFTs and collections
-- End users can mint NFTs
-- End users can list NFTs for sale
-- End users can redeem their NFTs
-- Marketplace for end users
+`Merchant-Centric Features`
+- 3-step merchant onboarding process
+- Verified merchant badge system
+- Trust score and reputation management
+- Digital product creation and management
+- Order tracking and fulfillment
+- Customer review and rating system
+- Analytics dashboard for business insights
 
-`Admin Panel & Launchpad Platform`
-- Complete admin backend with authentication
-- Admin dashboard for managing submissions
-- Launchpad application system
-- User management interface
-- Blockchain event monitoring
+`Advanced Commerce Infrastructure`
+- Smart contract-based payment processing
+- Multi-currency support (ETH, BASE, stablecoins)
+- Time-lock escrow mechanisms
+- Dispute resolution system
+- Automated fee distribution
+- Integration with Chainlink oracles
 
-`Advanced Smart Contracts`
-- Factory contract for deploying new NFT collections
-- Subscription NFT system
-- Upgradable contract architecture (V2)
-- Marketplace contract for trading
+`Modular Smart Contract Architecture`
+- MerchantRegistry.sol - Merchant verification and trust scoring
+- EscrowManager.sol - Time-lock escrow for buyer protection
+- RedemptionManager.sol - Advanced redemption with burn-to-soulbound
+- NFTFactory.sol - Enhanced factory with commerce integration
+- Upgradeable UUPS proxy pattern for all contracts
 
-`Test Coverage & Documentation`
-- Unit testing ensures that all the codes meet the quality standards and the functions return the expected output.
-- Test coverage shows us the extent of how much of our codes are covered by tests. We ideally aim for 100% coverage.
-- NatSpec commenting provides documentation for both technical and non-technical people. 
+`Comprehensive Testing & Security`
+- Extensive unit test coverage for all commerce features
+- Security audits for smart contracts
+- Reentrancy protection and access control
+- Pausable mechanisms for emergency situations
+- Upgrade authorization with multi-signature support 
 
 
 </p>
