@@ -181,7 +181,7 @@ describe("SimpleCollectible Contract", function () {
       
       await expect(nft.ackRedeem(0, 0, 0))
         .to.emit(nft, "Redeemed")
-        .withArgs(0, addr1.address);
+        .withArgs(0, addr1.address, ethers.BigNumber.from(0));
       
       // Token should be burned
       await expect(nft.ownerOf(0)).to.be.revertedWith("ERC721: invalid token ID");

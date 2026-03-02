@@ -33,7 +33,7 @@ describe("MerchantRegistry", function () {
       
       await expect(tx)
         .to.emit(merchantRegistry, "MerchantRegistered")
-        .withArgs(merchant1.address, BUSINESS_NAME, BUSINESS_TYPE);
+        .withArgs(merchant1.address, BUSINESS_NAME, BUSINESS_TYPE, ethers.BigNumber.from(0));
 
       const merchantInfo = await merchantRegistry.getMerchantInfo(merchant1.address);
       expect(merchantInfo.businessName).to.equal(BUSINESS_NAME);
@@ -88,7 +88,7 @@ describe("MerchantRegistry", function () {
       
       await expect(tx)
         .to.emit(merchantRegistry, "DocumentAdded")
-        .withArgs(merchant1.address, "Business Registration", docHash);
+        .withArgs(merchant1.address, "Business Registration", docHash, ethers.BigNumber.from(0));
 
       const documents = await merchantRegistry.getMerchantDocuments(merchant1.address);
       expect(documents.length).to.equal(1);
@@ -131,7 +131,7 @@ describe("MerchantRegistry", function () {
       
       await expect(tx)
         .to.emit(merchantRegistry, "MerchantVerified")
-        .withArgs(merchant1.address, 2);
+        .withArgs(merchant1.address, 2, ethers.BigNumber.from(0));
 
       const merchantInfo = await merchantRegistry.getMerchantInfo(merchant1.address);
       expect(merchantInfo.verificationStatus).to.equal(2); // VERIFIED
@@ -188,7 +188,7 @@ describe("MerchantRegistry", function () {
       
       await expect(tx)
         .to.emit(merchantRegistry, "TrustScoreUpdated")
-        .withArgs(merchant1.address, 300, 400);
+        .withArgs(merchant1.address, 300, 400, ethers.BigNumber.from(0));
 
       const merchantInfo = await merchantRegistry.getMerchantInfo(merchant1.address);
       expect(merchantInfo.trustScore).to.equal(400);
@@ -231,7 +231,7 @@ describe("MerchantRegistry", function () {
       
       await expect(tx)
         .to.emit(merchantRegistry, "MerchantSuspended")
-        .withArgs(merchant1.address, "Violation of terms");
+        .withArgs(merchant1.address, "Violation of terms", ethers.BigNumber.from(0));
 
       const merchantInfo = await merchantRegistry.getMerchantInfo(merchant1.address);
       expect(merchantInfo.verificationStatus).to.equal(4); // SUSPENDED
@@ -245,7 +245,7 @@ describe("MerchantRegistry", function () {
       
       await expect(tx)
         .to.emit(merchantRegistry, "MerchantVerified")
-        .withArgs(merchant1.address, 2);
+        .withArgs(merchant1.address, 2, ethers.BigNumber.from(0));
 
       const merchantInfo = await merchantRegistry.getMerchantInfo(merchant1.address);
       expect(merchantInfo.verificationStatus).to.equal(2); // VERIFIED

@@ -1,3 +1,4 @@
+import express from 'express';
 import NFTSale from '../models/nft_sale_model.js';
 import Routes from '../routes/index_routes.js';
 
@@ -15,7 +16,6 @@ class MarketplaceController {
     }
     
     static getRouter() {
-        const express = require('express');
         const router = express.Router();
         const controller = new MarketplaceController();
         
