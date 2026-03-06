@@ -3,6 +3,8 @@ import ResponseHandler from "../utils/response_handler.js"
 import { StatusCodes } from 'http-status-codes';
 import Strings from "../lang/strings.js";
 import Submission from "../models/submission_model.js";
+import LaunchPadModel from "../models/launch_pad_model.js";
+import FileService from "./file_service.js";
 import { generateSubmissionId } from "../utils/id_generator.js";
 
 class LaunchPadService {
@@ -153,6 +155,3 @@ class LaunchPadService {
 }
 
 export default LaunchPadService;
-
-import LaunchPadModel from "../models/launch_pad_model.js";
-import FileService from "./file_service.js";

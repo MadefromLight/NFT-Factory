@@ -15,9 +15,8 @@ import {
   uploadFinalArtwork,
   generateMetadata,
   getAnalytics,
-  getUserStatus,
 } from '../controllers/adminController';
-import { testLogin, testSignup } from '../controllers/testController';
+import { testLogin, testSignup, getUserStatus } from '../controllers/testController';
 import { authenticate, authorize } from '../middleware/auth';
 import multer from 'multer';
 
@@ -26,7 +25,17 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 // Public routes
 // Get current user's status
-// router.get('/me/status', authenticate, getUserStatus);
+router.get('/me/status', authenticate, (req, res) => {
+    res.status(200).json({
+      success: true,
+      data: {
+        id: (req as any).user.userId,
+        email: (req as any).user.email,
+        role: (req as any).user.role,
+        status: 'APPROVED', // Assuming approved for this route
+      },
+    });
+  });
 
 // Temporary route to initialize super admin (to be removed after setup)
 router.post('/init-super-admin', async (req, res) => {
@@ -103,7 +112,7 @@ router.post(
     body('email').isEmail().withMessage('Valid email is required'),
     body('password').notEmpty().withMessage('Password is required'),
   ],
-  testLogin
+  adminLogin
 );
 
 router.post(
@@ -114,7 +123,7 @@ router.post(
     body('name').notEmpty().withMessage('Name is required'),
     body('role').optional().isIn(['ADMIN', 'DESIGNER', 'OPS']).withMessage('Valid role is required'),
   ],
-  testSignup
+  adminSignup
 );
 
 // Protected routes

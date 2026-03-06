@@ -334,6 +334,137 @@ contract Marketplace is
         return subscriptionId;
     }
 
+    // ============ Cross-Chain (CCIP) Functions ============
+
+    /// @dev CCIP NFT Receiver contract
+    address public ccipReceiver;
+
+    /// @dev Mapping of supported source chains
+    mapping(uint64 => bool) public supportedChains;
+
+    /// @dev Array of supported chain selectors
+    uint64[] public supportedChainSelectors;
+
+    event CCIPReceiverSet(address indexed receiver);
+    event ChainSupported(uint64 indexed chainSelector, bool supported);
+    event CrossChainPurchaseExecuted(
+        address indexed buyer,
+        address indexed nftContract,
+        uint256 indexed tokenId,
+        uint256 amount,
+        uint64 sourceChainSelector
+    );
+
+    /**
+     * @notice Sets the CCIP receiver contract address
+     * @param _receiver Address of CCIPNFTReceiver contract
+     */
+    function setCCIPReceiver(address _receiver) external onlyOwner {
+        if (_receiver == address(0)) revert InvalidTokenContract();
+        ccipReceiver = _receiver;
+        emit CCIPReceiverSet(_receiver);
+    }
+
+    /**
+     * @notice Adds or removes support for a source chain
+     * @param chainSelector CCIP chain selector
+     * @param supported Whether to support this chain
+     */
+    function setChainSupport(uint64 chainSelector, bool supported) external onlyOwner {
+        supportedChains[chainSelector] = supported;
+        emit ChainSupported(chainSelector, supported);
+        
+        if (supported) {
+            supportedChainSelectors.push(chainSelector);
+        }
+    }
+
+    /**
+     * @notice Executes a cross-chain NFT purchase (called by CCIP receiver)
+     * @param buyer Buyer address on source chain
+     * @param nftContract NFT contract address
+     * @param tokenId Token ID to purchase
+     * @param amount Payment amount
+     * @param metadata Additional data (royalty info, etc.)
+     */
+    function executeCrossChainPurchase(
+        address buyer,
+        address nftContract,
+        uint256 tokenId,
+        uint256 amount,
+        bytes calldata metadata
+    ) 
+        external 
+        payable
+        whenNotPaused
+        nonReentrant
+    {
+        // Verify caller is CCIP receiver
+        if (msg.sender != ccipReceiver) revert UnauthorizedMarketplace();
+
+        // Get the listing
+        Listing storage listing = listings[nftContract][tokenId];
+        if (!listing.active) revert ListingNotFound();
+        if (amount < listing.price) revert InsufficientPayment();
+
+        // Calculate fees based on organization tier
+        uint256 platformFeeBps = subscriptionNFT.getMarketplaceFee(listing.organizationTier);
+        uint256 platformFee = (listing.price * platformFeeBps) / BASIS_POINTS;
+
+        // Get royalty info
+        SimpleCollectibleV2 collection = SimpleCollectibleV2(payable(nftContract));
+        (address royaltyReceiver, uint256 royaltyFee) = collection.royaltyInfo(tokenId, listing.price);
+
+        // Calculate seller proceeds
+        uint256 sellerProceeds = listing.price - platformFee - royaltyFee;
+
+        // Mark listing as inactive
+        listing.active = false;
+        totalActiveListings--;
+
+        // Transfer NFT to buyer (on this chain)
+        // For true cross-chain NFT transfer, we'd need to mint a wrapped version
+        // For now, we transfer to buyer's address (they can claim when they bridge)
+        IERC721(nftContract).safeTransferFrom(listing.seller, buyer, tokenId);
+
+        // Transfer funds
+        _transferETH(listing.seller, sellerProceeds);
+        _transferETH(platformFeeRecipient, platformFee);
+        if (royaltyFee > 0 && royaltyReceiver != address(0)) {
+            _transferETH(royaltyReceiver, royaltyFee);
+        }
+
+        // Refund excess to buyer
+        if (amount > listing.price) {
+            _transferETH(buyer, amount - listing.price);
+        }
+
+        emit Sold(
+            nftContract,
+            tokenId,
+            listing.seller,
+            buyer,
+            listing.price,
+            platformFee,
+            royaltyFee
+        );
+
+        emit CrossChainPurchaseExecuted(
+            buyer,
+            nftContract,
+            tokenId,
+            amount,
+            0 // sourceChainSelector would be passed from CCIP receiver
+        );
+    }
+
+    /**
+     * @notice Returns list of supported chain selectors
+     */
+    function getSupportedChains() external view returns (uint64[] memory) {
+        return supportedChainSelectors;
+    }
+
     // ============ View Functions ============
 
     /**

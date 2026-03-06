@@ -71,7 +71,7 @@ const Dashboard = () => {
 
   const fetchDashboardStats = async () => {
     try {
-      const response = await fetch(`/api/dashboard/${address}/overview`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/v1/dashboard/${address}/overview`);
       const data = await response.json();
       if (data.success) {
         setStats(data.data);

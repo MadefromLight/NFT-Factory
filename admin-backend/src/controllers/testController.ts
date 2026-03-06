@@ -197,3 +197,34 @@ export const testSignup = async (req: Request, res: Response) => {
     });
   }
 };
+
+// Add the getUserStatus function
+export const getUserStatus = async (req: Request, res: Response) => {
+  try {
+    // The user info is already attached to req by the authenticate middleware
+    const user = (req as any).user;
+    
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'User not authenticated',
+      });
+    }
+    
+    return res.status(200).json({
+      success: true,
+      data: {
+        id: user.userId,
+        email: user.email,
+        role: user.role,
+        status: 'APPROVED', // Assuming approved for this route
+      },
+    });
+  } catch (error) {
+    logger.error('Error getting user status:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+    });
+  }
+};

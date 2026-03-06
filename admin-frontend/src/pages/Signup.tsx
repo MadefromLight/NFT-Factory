@@ -53,7 +53,8 @@ export default function Signup() {
       toast.success(response.data.message || 'Account created successfully!')
       navigate('/pending-approval')
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Signup failed')
+      const errorMessage = error.response?.data?.message || error.response?.data?.error || 'Signup failed';
+      toast.error(errorMessage)
     } finally {
       setIsLoading(false)
     }

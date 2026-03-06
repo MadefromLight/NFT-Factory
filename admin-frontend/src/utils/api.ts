@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
 const api = axios.create({
   baseURL: API_URL,
@@ -31,19 +31,31 @@ api.interceptors.response.use(
 )
 
 // Auth
-export const login = (email: string, password: string) =>
-  api.post('/admin/login', { email, password })
+export const login = async (email: string, password: string) => {
+  try {
+    return await api.post('/api/admin/login', { email, password });
+  } catch (error: any) {
+    // Re-throw with enhanced error information
+    throw error;
+  }
+}
 
-export const signup = (data: { name: string; email: string; password: string; role: string }) =>
-  api.post('/admin/signup', data)
+export const signup = async (data: { name: string; email: string; password: string; role: string }) => {
+  try {
+    return await api.post('/api/admin/signup', data);
+  } catch (error: any) {
+    // Re-throw with enhanced error information
+    throw error;
+  }
+}
 
-export const getPendingStatus = () => api.get('/admin/me/status')
+export const getPendingStatus = () => api.get('/api/admin/me/status')
 
 // User Management (Super Admin only)
-export const getPendingUsers = () => api.get('/admin/users/pending')
-export const approveUser = (userId: string) => api.post(`/admin/users/${userId}/approve`)
+export const getPendingUsers = () => api.get('/api/admin/users/pending')
+export const approveUser = (userId: string) => api.post(`/api/admin/users/${userId}/approve`)
 export const rejectUser = (userId: string, reason: string) => 
-  api.post(`/admin/users/${userId}/reject`, { reason })
+  api.post(`/api/admin/users/${userId}/reject`, { reason })
 
 // Submissions
 export const getSubmissions = (params?: {
@@ -52,32 +64,32 @@ export const getSubmissions = (params?: {
   requestedProductClass?: number
   page?: number
   limit?: number
-}) => api.get('/admin/submissions', { params })
+}) => api.get('/api/admin/submissions', { params })
 
 export const getSubmission = (id: string) =>
-  api.get(`/admin/submissions/${id}`)
+  api.get(`/api/admin/submissions/${id}`)
 
 export const approveSubmission = (id: string, assignedDesigner?: string) =>
-  api.post(`/admin/submissions/${id}/approve`, { assignedDesigner })
+  api.post(`/api/admin/submissions/${id}/approve`, { assignedDesigner })
 
 export const rejectSubmission = (id: string, reason: string) =>
-  api.post(`/admin/submissions/${id}/reject`, { reason })
+  api.post(`/api/admin/submissions/${id}/reject`, { reason })
 
 export const assignDesigner = (id: string, designerId: string) =>
-  api.post(`/admin/submissions/${id}/assign-designer`, { designerId })
+  api.post(`/api/admin/submissions/${id}/assign-designer`, { designerId })
 
 export const uploadArtwork = (id: string, file: File) => {
   const formData = new FormData()
   formData.append('artwork', file)
-  return api.post(`/admin/submissions/${id}/upload-artwork`, formData, {
+  return api.post(`/api/admin/submissions/${id}/upload-artwork`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
 }
 
 export const generateMetadata = (id: string) =>
-  api.post(`/admin/submissions/${id}/generate-metadata`)
+  api.post(`/api/admin/submissions/${id}/generate-metadata`)
 
 // Analytics
-export const getAnalytics = () => api.get('/admin/analytics')
+export const getAnalytics = () => api.get('/api/admin/analytics')
 
 export default api

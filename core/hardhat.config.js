@@ -14,16 +14,46 @@ config();
 const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || "";
 const BASESCAN_API_KEY = process.env.BASESCAN_API_KEY || "";
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "";
 const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || "";
 
-// RPC URLs
-const BASE_SEPOLIA_RPC = ALCHEMY_API_KEY
-  ? `https://base-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
-  : "https://sepolia.base.org";
-
-const ETHEREUM_SEPOLIA_RPC = ALCHEMY_API_KEY
-  ? `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
-  : "https://rpc.sepolia.org";
+// Chainlink CCIP Configuration
+const CCIP_SUPPORT = {
+  // Testnet configurations
+  'ethereum-sepolia': {
+    chainId: 11155111,
+    name: 'Ethereum Sepolia',
+    rpcUrl: ALCHEMY_API_KEY
+      ? `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
+      : 'https://rpc.sepolia.org',
+    ccipBnSelector: '16015289601813375307', // Ethereum Sepolia CCIP Bn selector
+  },
+  'base-sepolia': {
+    chainId: 84532,
+    name: 'Base Sepolia',
+    rpcUrl: ALCHEMY_API_KEY
+      ? `https://base-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
+      : 'https://sepolia.base.org',
+    ccipBnSelector: '10344971235874465080', // Base Sepolia CCIP Bn selector
+  },
+  // Add more chains here as needed
+  'polygon-amoy': {
+    chainId: 80002,
+    name: 'Polygon Amoy',
+    rpcUrl: ALCHEMY_API_KEY
+      ? `https://polygon-amoy.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
+      : 'https://rpc.amoy.polygon.technology',
+    ccipBnSelector: '16281711391670634445', // Polygon Amoy CCIP Bn selector (verify before use)
+  },
+  'arbitrum-sepolia': {
+    chainId: 421614,
+    name: 'Arbitrum Sepolia',
+    rpcUrl: ALCHEMY_API_KEY
+      ? `https://arb-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
+      : 'https://sepolia-rollup.arbitrum.io/rpc',
+    ccipBnSelector: '3478487238524512106', // Arbitrum Sepolia CCIP Bn selector (verify before use)
+  },
+};
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -54,19 +84,33 @@ module.exports = {
     },
 
     sepolia: {
-      url: ETHEREUM_SEPOLIA_RPC,
+      url: CCIP_SUPPORT['ethereum-sepolia'].rpcUrl,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
-      chainId: 11155111,
+      chainId: CCIP_SUPPORT['ethereum-sepolia'].chainId,
       blockConfirmations: 3,
     },
 
     baseSepolia: {
-      url: BASE_SEPOLIA_RPC,
+      url: CCIP_SUPPORT['base-sepolia'].rpcUrl,
       accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
-      chainId: 84532,
+      chainId: CCIP_SUPPORT['base-sepolia'].chainId,
       blockConfirmations: 3,
       gasPrice: 5000000000, // 5 gwei
       gas: 5000000,
+    },
+
+    polygonAmoy: {
+      url: CCIP_SUPPORT['polygon-amoy'].rpcUrl,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      chainId: CCIP_SUPPORT['polygon-amoy'].chainId,
+      blockConfirmations: 3,
+    },
+
+    arbitrumSepolia: {
+      url: CCIP_SUPPORT['arbitrum-sepolia'].rpcUrl,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+      chainId: CCIP_SUPPORT['arbitrum-sepolia'].chainId,
+      blockConfirmations: 3,
     },
   },
 

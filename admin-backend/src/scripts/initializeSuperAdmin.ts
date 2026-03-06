@@ -20,7 +20,6 @@ const initializeSuperAdmin = async () => {
     const existingSuperAdmin = await AdminUser.findOne({ role: 'SUPER_ADMIN' });
     if (existingSuperAdmin) {
       console.log('Super Admin already exists:', existingSuperAdmin.email);
-      mongoose.connection.close();
       return;
     }
 
@@ -36,7 +35,6 @@ const initializeSuperAdmin = async () => {
       await existingUser.save();
       
       console.log('User updated to Super Admin successfully');
-      mongoose.connection.close();
       return;
     }
 
@@ -62,8 +60,6 @@ const initializeSuperAdmin = async () => {
     console.log('Name:', superAdmin.name);
     console.log('Role:', superAdmin.role);
     console.log('Status:', superAdmin.status);
-
-    mongoose.connection.close();
   } catch (error) {
     console.error('Error initializing super admin:', error);
   }

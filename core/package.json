@@ -15,6 +15,7 @@
     "ts-node": ">=8.0.0"
   },
   "dependencies": {
+    "@chainlink/contracts-ccip": "^1.4.0",
     "@chainlink/contracts": "^0.6.1",
     "@openzeppelin/contracts": "^4.8.0",
     "@openzeppelin/hardhat-upgrades": "^1.21.0",

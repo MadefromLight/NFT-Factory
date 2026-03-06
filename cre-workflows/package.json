@@ -1,0 +1,33 @@
+{
+  "name": "nft-factory-cre-workflows",
+  "version": "1.0.0",
+  "description": "Chainlink CRE workflows for NFT Factory cross-chain royalty distribution",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "simulate": "cre simulate",
+    "deploy": "cre deploy",
+    "test": "jest",
+    "test:integration": "jest --config jest.integration.config.js"
+  },
+  "keywords": [
+    "chainlink",
+    "cre",
+    "ccip",
+    "nft",
+    "cross-chain"
+  ],
+  "author": "NFT Factory Team",
+  "license": "MIT",
+  "dependencies": {
+    "@chainlink/cre-sdk-ts": "^1.0.0",
+    "ethers": "^6.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0"
+  }
+}
