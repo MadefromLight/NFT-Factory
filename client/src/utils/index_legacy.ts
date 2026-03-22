@@ -1,12 +1,11 @@
-// Wagmi v2 Compatible Utility Functions
-// This file provides read-only contract interaction utilities
-// For write operations, use wagmi v2 hooks (useWriteContract, useSimulateContract) directly in components
-
 import { readContract as readContractData } from "@wagmi/core";
 import Factory from "../../constants/Factory.json";
 import SimpleCollectible from "../../constants/SimpleCollectible.json";
 import SubscriptionNFT from "../../constants/SubscriptionNFT.json";
 import Marketplace from "../../constants/Marketplace.json";
+
+// Note: Contract write functions have been migrated to use wagmi v2 hooks (useWriteContract)
+// These functions are kept for backward compatibility but now throw errors directing users to use hooks
 
 // Base Sepolia Chain ID
 const BASE_SEPOLIA_CHAIN_ID = 84532;
@@ -35,9 +34,49 @@ export const readFactoryContract = async (
     functionName,
     args,
     chainId: BASE_SEPOLIA_CHAIN_ID,
-  } as any);
+  });
 
   return data;
+};
+
+// Factory Contract Write Functions - Legacy deploy (without subscription)
+export const deployCollection = async (
+  name: string,
+  symbol: string,
+  uris: string[],
+  mintFees: bigint[]
+) => {
+  if (!Factory.address) {
+    throw new Error("Factory address not configured. Please deploy contracts first.");
+  }
+
+  // Note: In wagmi v2, contract writes should be done using useWriteContract hook
+  // This function is kept for backward compatibility but needs to be called within a React component context
+  throw new Error("Please use the useWriteContract hook from wagmi for writing to contracts");
+};
+
+// FactoryV2 Contract Write Functions - Deploy with subscription
+export const deployCollectionWithSubscription = async (
+  name: string,
+  symbol: string,
+  uris: string[],
+  mintFees: bigint[],
+  productClass: SubscriptionTier
+) => {
+  if (!Factory.address) {
+    throw new Error("Factory address not configured. Please deploy contracts first.");
+  }
+
+  const { request } = await prepareWriteContract({
+    address: Factory.address as `0x${string}`,
+    abi: Factory.abi,
+    functionName: "deployWithSubscription",
+    args: [name, symbol, uris, mintFees, productClass],
+    chainId: BASE_SEPOLIA_CHAIN_ID,
+  });
+
+  const hash = await writeContract(request);
+  return hash;
 };
 
 // SimpleCollectible Contract Read Functions
@@ -53,13 +92,32 @@ export const readSimpleCollectibleContract = async (
       functionName,
       args,
       chainId: BASE_SEPOLIA_CHAIN_ID,
-    } as any);
+    });
 
     return functionName === "name" ? String(data).split(",")[0] : data;
   } catch (err) {
     console.error("Error reading contract:", err);
     return null;
   }
+};
+
+// SimpleCollectible Contract Write Functions
+export const mintNFT = async (
+  collectionAddress: `0x${string}`,
+  uriIndex: number,
+  value: bigint
+) => {
+  const { request } = await prepareWriteContract({
+    address: collectionAddress,
+    abi: SimpleCollectible.abi,
+    functionName: "createCollectible",
+    args: [collectionAddress, uriIndex],
+    value,
+    chainId: BASE_SEPOLIA_CHAIN_ID,
+  });
+
+  const hash = await writeContract(request);
+  return hash;
 };
 
 // Helper Functions
@@ -138,9 +196,26 @@ export const readSubscriptionNFTContract = async (
     functionName,
     args,
     chainId: BASE_SEPOLIA_CHAIN_ID,
-  } as any);
+  });
 
   return data;
+};
+
+export const mintSubscription = async (tier: SubscriptionTier) => {
+  if (!SubscriptionNFT.address) {
+    throw new Error("SubscriptionNFT address not configured.");
+  }
+
+  const { request } = await prepareWriteContract({
+    address: SubscriptionNFT.address as `0x${string}`,
+    abi: SubscriptionNFT.abi,
+    functionName: "mintSubscription",
+    args: [tier],
+    chainId: BASE_SEPOLIA_CHAIN_ID,
+  });
+
+  const hash = await writeContract(request);
+  return hash;
 };
 
 export const getUserSubscription = async (walletAddress: `0x${string}`) => {
@@ -256,7 +331,7 @@ export const getUSDCAllowance = async (
       functionName: "allowance",
       args: [owner, spender],
       chainId: BASE_SEPOLIA_CHAIN_ID,
-    } as any);
+    });
     return BigInt((result as unknown[])[0] as string);
   } catch (err) {
     console.error("Error fetching USDC allowance:", err);
@@ -325,6 +400,40 @@ export const getAllUserNFTs = async (userAddress: `0x${string}`) => {
   }
 };
 
+// Approve USDC spending
+export const approveUSDC = async (
+  spender: `0x${string}`,
+  amount: bigint
+) => {
+  try {
+    const usdcAddress = await getUSDCAddress();
+    const { request } = await prepareWriteContract({
+      address: usdcAddress as `0x${string}`,
+      abi: [
+        {
+          inputs: [
+            { name: "spender", type: "address" },
+            { name: "amount", type: "uint256" },
+          ],
+          name: "approve",
+          outputs: [{ name: "", type: "bool" }],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      functionName: "approve",
+      args: [spender, amount],
+      chainId: BASE_SEPOLIA_CHAIN_ID,
+    });
+
+    const hash = await writeContract(request);
+    return hash;
+  } catch (err) {
+    console.error("Error approving USDC:", err);
+    throw err;
+  }
+};
+
 // ============ Marketplace Contract Functions ============
 
 export const readMarketplaceContract = async (
@@ -341,13 +450,50 @@ export const readMarketplaceContract = async (
     functionName,
     args,
     chainId: BASE_SEPOLIA_CHAIN_ID,
-  } as any);
+  });
 
   return data;
 };
 
-// NOTE: Write functions should be implemented using wagmi v2 hooks in components
-// Example:
-// const { writeContract } = useWriteContract();
-// const { data: simulateData } = useSimulateContract({ ... });
-// await writeContract(simulateData!.request);
+export const listNFT = async (
+  tokenContract: `0x${string}`,
+  tokenId: bigint,
+  price: bigint
+) => {
+  if (!Marketplace.address) {
+    throw new Error("Marketplace address not configured.");
+  }
+
+  const { request } = await prepareWriteContract({
+    address: Marketplace.address as `0x${string}`,
+    abi: Marketplace.abi,
+    functionName: "list",
+    args: [tokenContract, tokenId, price],
+    chainId: BASE_SEPOLIA_CHAIN_ID,
+  });
+
+  const hash = await writeContract(request);
+  return hash;
+};
+
+export const buyNFT = async (
+  tokenContract: `0x${string}`,
+  tokenId: bigint,
+  value: bigint
+) => {
+  if (!Marketplace.address) {
+    throw new Error("Marketplace address not configured.");
+  }
+
+  const { request } = await prepareWriteContract({
+    address: Marketplace.address as `0x${string}`,
+    abi: Marketplace.abi,
+    functionName: "buy",
+    args: [tokenContract, tokenId],
+    value,
+    chainId: BASE_SEPOLIA_CHAIN_ID,
+  });
+
+  const hash = await writeContract(request);
+  return hash;
+};

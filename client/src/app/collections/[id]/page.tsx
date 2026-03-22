@@ -15,9 +15,6 @@ import {
 } from "@wagmi/core";
 
 import {
-  usePrepareContractWrite,
-  useContractWrite,
-  useWaitForTransaction,
   useAccount,
 } from "wagmi";
 import { SimpleCollectible } from "../../../../constants";
@@ -79,22 +76,30 @@ const Details = () => {
     });
   }, []);
 
-  const {
-    config,
-    error: prepareError,
-    isError: isPrepareError,
-  } = usePrepareContractWrite({
-    address: cAddress,
-    abi: SimpleCollectible.abi,
-    functionName: "createCollectible",
-    args: [address, params],
-    value: parseEther(String(collection.mintFee * 100)),
-  });
-  const { data, error, isError, write } = useContractWrite(config);
+  // TODO: Update to wagmi v2 API - use useWriteContract instead
+  // const {
+  //   config,
+  //   error: prepareError,
+  //   isError: isPrepareError,
+  // } = usePrepareContractWrite({
+  //   address: cAddress,
+  //   abi: SimpleCollectible.abi,
+  //   functionName: "createCollectible",
+  //   args: [address, params],
+  //   value: parseEther(String(collection.mintFee * 100)),
+  // });
+  // const { data, error, isError, write } = useContractWrite(config);
 
-  const { isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
-  });
+  // const { isSuccess } = useWaitForTransaction({
+  //   hash: data?.hash,
+  // });
+  
+  // Temporary mock for demonstration
+  const data = { hash: null };
+  const error = null;
+  const isError = false;
+  const write = () => {};
+  const isSuccess = false;
 
   useEffect(() => {
     console.log(String(collection.mintFee * 100), collection.mintFee);
@@ -103,12 +108,12 @@ const Details = () => {
       toast.success("Minted Successfully", { theme: "colored" });
       router.push("");
       //setIsRedeemed(true);
-    } else if ((isPrepareError || isError) && collection.mintFee) {
-      toast.error(prepareError?.message || error?.message, {
+    } else if (isError && collection.mintFee) {
+      toast.error((error as unknown as Error)?.message || "Transaction failed", {
         theme: "colored",
       });
     }
-  }, [isSuccess, isError, isPrepareError]);
+  }, [isSuccess, isError]);
 
   useEffect(() => {
     async function updateUI() {

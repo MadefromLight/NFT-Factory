@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useConnect } from "wagmi";
+import { coinbaseWallet } from "wagmi/connectors";
 import TopNavigation from "@/common/navs/top/TopNavigation";
 import Footer from "@/components/Footer";
 import { orbitron } from "@/fonts/fonts";
@@ -10,6 +11,7 @@ import Link from "next/link";
 
 const MerchantDashboard = () => {
   const { address, isConnected } = useAccount();
+  const { connect } = useConnect();
   const [activeTab, setActiveTab] = useState("overview");
   const [loading, setLoading] = useState(true);
 
@@ -417,7 +419,7 @@ const MerchantDashboard = () => {
               Please connect your wallet to access your merchant dashboard
             </p>
             <Button 
-              handleClick={() => {}} 
+              handleClick={() => connect({ connector: coinbaseWallet({ appName: 'NFT Factory', darkMode: true }) })} 
               className="bg-primary hover:opacity-90 px-8 py-3 text-black"
             >
               Connect Wallet

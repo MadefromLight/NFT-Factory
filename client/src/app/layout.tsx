@@ -5,7 +5,6 @@ import store from "@/store";
 import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { WagmiConfig } from "wagmi";
 import "./globals.css";
 
 export default function RootLayout({
@@ -16,13 +15,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <WagmiConfig config={wagmiConfig}>
-          <WalletConnectProvider />
+        <WalletConnectProvider>
           <Provider store={store}>
             <AppLayout>{children}</AppLayout>
           </Provider>
           <ToastContainer />
-        </WagmiConfig>
+        </WalletConnectProvider>
       </body>
     </html>
   );

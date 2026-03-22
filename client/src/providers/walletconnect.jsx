@@ -1,76 +1,48 @@
 "use client";
 
-import {
-  EthereumClient,
-  w3mConnectors,
-  w3mProvider,
-} from "@web3modal/ethereum";
-import { Web3Modal } from "@web3modal/react";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
+import { WagmiProvider, createConfig, http } from "wagmi";
+import { baseSepolia } from "wagmi/chains";
+import { coinbaseWallet, injected, metaMask } from "wagmi/connectors";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Base Sepolia chain definition
-const baseSepoliaChain = {
-  id: 84532,
-  name: 'Base Sepolia',
-  network: 'base-sepolia',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'Base Sepolia Ether',
-    symbol: 'ETH',
-  },
-  rpcUrls: {
-    default: {
-      http: [process.env.NEXT_PUBLIC_ALCHEMY_BASE_SEPOLIA_RPC || "https://sepolia.base.org"],
-    },
-    public: {
-      http: [process.env.NEXT_PUBLIC_ALCHEMY_BASE_SEPOLIA_RPC || "https://sepolia.base.org"],
-    },
-  },
-  blockExplorers: {
-    default: { name: 'BaseScan', url: 'https://sepolia.basescan.org' },
-  },
-  testnet: true,
+const chains = [baseSepolia];
+
+// Create wagmi config with explicit Coinbase Wallet support
+const metadata = {
+  name: 'NFT Factory',
+  description: 'NFT Factory Platform',
+  url: 'https://nftfactory.com',
+  icons: ['https://avatars.githubusercontent.com/u/37784883']
 };
 
-const chains = [baseSepoliaChain];
-
-// Use environment variable for project ID (should be set in .env.local)
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "34043931dedf67433e6f95bfa3205586";
-
-const { publicClient } = configureChains(
+const wagmiConfig = createConfig({
   chains,
-  [w3mProvider({ projectId }), publicProvider()]
-);
-
-// Use Web3Modal's built-in connectors which include Coinbase Wallet
-const connectors = w3mConnectors({ 
-  projectId, 
-  chains,
-  version: 2 // Use WalletConnect v2
+  connectors: [
+    coinbaseWallet({
+      appName: 'NFT Factory',
+      appLogoUrl: 'https://avatars.githubusercontent.com/u/37784883',
+      darkMode: true,
+    }),
+    injected({ shimDisconnect: true }),
+    metaMask(),
+  ],
+  transports: {
+    [baseSepolia.id]: http(),
+  },
 });
 
-export const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors,
-  publicClient,
-});
+// Create query client
+const queryClient = new QueryClient();
 
-const ethereumClient = new EthereumClient(wagmiConfig, chains);
+export { wagmiConfig, queryClient };
 
-export default function WalletConnect() {
+export default function WalletConnectProvider({ children }) {
   return (
-    <>
-      <WagmiConfig config={wagmiConfig}></WagmiConfig>
-      <Web3Modal 
-        projectId={projectId} 
-        ethereumClient={ethereumClient}
-        defaultChain={baseSepoliaChain}
-        themeMode="dark"
-        themeVariables={{
-          '--w3m-accent-color': '#F59E0B',
-        }}
-      />
-    </>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        {children}
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 }

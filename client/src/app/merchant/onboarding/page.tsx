@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useAccount } from "wagmi";
+import { useAccount, useConnect } from "wagmi";
+import { coinbaseWallet } from "wagmi/connectors";
 import TopNavigation from "@/common/navs/top/TopNavigation";
 import Footer from "@/components/Footer";
 import { orbitron } from "@/fonts/fonts";
@@ -10,6 +11,7 @@ import Link from "next/link";
 
 const MerchantOnboarding = () => {
   const { address, isConnected } = useAccount();
+  const { connect } = useConnect();
   const [currentStep, setCurrentStep] = useState(1);
   const [businessData, setBusinessData] = useState({
     businessName: "",
@@ -86,7 +88,7 @@ const MerchantOnboarding = () => {
                 <p className="text-gray-400 mb-6">
                   Please connect your wallet to continue the onboarding process
                 </p>
-                <Button handleClick={() => {}} className="w-full bg-primary hover:opacity-90">
+                <Button handleClick={() => connect({ connector: coinbaseWallet({ appName: 'NFT Factory', darkMode: true }) })} className="w-full bg-primary hover:opacity-90">
                   Connect Wallet
                 </Button>
               </div>
