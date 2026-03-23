@@ -1,366 +1,590 @@
 # NFT Factory - Web3 Commerce Infrastructure Platform
 
-## Welcome to the NFT Factory Web3 Commerce Platform by Zeus Labs - Empowering MSMEs in the Decentralized Economy!
+## Welcome to the NFT Factory Web3 Commerce Platform by Zeus Labs
 
 <p align="center" width="100%">
   <img src="https://github.com/BukiOffor/Nft-assets/assets/58889001/7605392b-51ae-4e2d-825d-4fae2acbcec0" alt="site"/>
 </p>
 
-> ## Table of contents
+> **A comprehensive Web3 commerce infrastructure platform designed for Micro, Small, and Medium Enterprises (MSMEs) to create digital products, manage inventory, process secure transactions, and build trust through blockchain verification.**
+
+---
+
+## Table of Contents
+
 - [Overview](#overview)
-- [Core Features Implemented](#core-features-implemented)
+- [Core Features](#core-features)
 - [Technologies](#technologies)
-- [Repo Setup](#repo-setup)
+- [Project Structure](#project-structure)
+- [Quick Start](#quick-start)
 - [Requirements](#requirements)
-- [Setup the Project](#setup-the-project)
-  - [Install Hardhat](#install-hardhat)
-  - [Env Setup](#env-setup)
-  - [Setup Hardhat.config](#setup-hardhatconfig)
-- [Setup the Frontend](#setup-the-frontend)
-  - [Install Dependencies](#install-dependencies)
-  - [Steps to host the live site on Vercel](#steps-to-host-the-live-site-on-vercel)
-- [Testing the Smartcontract](#testing-the-smartcontract)
-- [NFT-Factory-MVP Contract Address](#Nft-factory-contract-address)
-- [Live Link](#live-link)
-- [Contributors](#contributors)
-- [Contributing to the project](#contributing-to-the-project)
-#
-> ## Overview
-<p align="justify">
-NFT Factory has evolved into a comprehensive Web3 Commerce Infrastructure platform designed specifically for Micro, Small, and Medium Enterprises (MSMEs). This platform transforms traditional business models by enabling merchants to create digital products, manage inventory, process secure transactions, and build trust through blockchain verification. Built on the Base network with advanced escrow mechanisms, redemption systems, and merchant verification, NFT Factory provides everything businesses need to thrive in the decentralized economy.
-</p>
+- [Installation](#installation)
+- [Smart Contracts](#smart-contracts)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [Support](#support)
 
+---
 
+## Overview
 
-#
-> ## Core Features Implemented
+NFT Factory has evolved into a comprehensive Web3 Commerce Infrastructure platform designed specifically for Micro, Small, and Medium Enterprises (MSMEs). This platform transforms traditional business models by enabling merchants to:
 
-`Web3 Commerce Infrastructure`
-- Complete merchant dashboard with analytics and inventory management
-- Advanced escrow system for buyer protection
-- Redemption mechanisms with burn-to-soulbound conversion
-- Merchant verification and trust scoring system
-- Multi-tier subscription model for businesses
+- Create and manage NFT collections with physical/digital redemption
+- Process secure transactions with built-in escrow protection
+- Build trust through merchant verification and reputation scoring
+- Accept subscription-based access with tiered privileges
+- Trade NFTs in a multi-chain marketplace with automated royalty distribution
 
-`Merchant-Centric Features`
-- 3-step merchant onboarding process
-- Verified merchant badge system
-- Trust score and reputation management
-- Digital product creation and management
-- Order tracking and fulfillment
-- Customer review and rating system
-- Analytics dashboard for business insights
+**Built on Base network** with advanced features including Chainlink CCIP for cross-chain interoperability, upgradeable smart contract architecture, and comprehensive merchant tools.
 
-`Advanced Commerce Infrastructure`
-- Smart contract-based payment processing
-- Multi-currency support (ETH, BASE, stablecoins)
-- Time-lock escrow mechanisms
-- Dispute resolution system
-- Automated fee distribution
-- Integration with Chainlink oracles
+---
 
-`Modular Smart Contract Architecture`
-- MerchantRegistry.sol - Merchant verification and trust scoring
-- EscrowManager.sol - Time-lock escrow for buyer protection
-- RedemptionManager.sol - Advanced redemption with burn-to-soulbound
-- NFTFactory.sol - Enhanced factory with commerce integration
-- Upgradeable UUPS proxy pattern for all contracts
+## Core Features
 
-`Comprehensive Testing & Security`
-- Extensive unit test coverage for all commerce features
-- Security audits for smart contracts
-- Reentrancy protection and access control
-- Pausable mechanisms for emergency situations
-- Upgrade authorization with multi-signature support 
+### Web3 Commerce Infrastructure
+- ✅ Complete merchant dashboard with analytics and inventory management
+- ✅ Advanced escrow system for buyer protection with time-lock mechanisms
+- ✅ Redemption mechanisms with burn-to-soulbound conversion
+- ✅ Merchant verification and trust scoring system
+- ✅ Multi-tier subscription model (Coal, Bronze, Silver, Gold, Platinum)
+- ✅ Cross-chain NFT purchases via Chainlink CCIP
+- ✅ Automated royalty distribution with CRE workflows
 
+### Merchant-Centric Features
+- ✅ 3-step merchant onboarding process
+- ✅ Verified merchant badge system
+- ✅ Trust score and reputation management
+- ✅ Digital product creation and management
+- ✅ Order tracking and fulfillment
+- ✅ Customer review and rating system
+- ✅ Analytics dashboard for business insights
 
-</p>
+### Advanced Commerce Infrastructure
+- ✅ Smart contract-based payment processing
+- ✅ Multi-currency support (ETH, BASE, stablecoins like USDC)
+- ✅ Time-lock escrow mechanisms for buyer protection
+- ✅ Dispute resolution system
+- ✅ Automated fee distribution based on subscription tiers
+- ✅ Integration with Chainlink oracles and CCIP
 
-#
-> ## Technologies
-| <b><u>Stack</u></b> | <b><u>Usage</u></b> |
-| :------------------ | :------------------ |
-| **`Solidity`**      | Smart contracts     |
-| **`Next JS`**       | Client frontend     |
-| **`React/Vite`**    | Admin frontend      |
-| **`TypeScript`**    | Admin backend       |
-| **`Node.js`**       | Server backend      |
-| **`Hardhat`**       | Smart contract development and deployment |
-| **`OpenZeppelin`**  | Security standards and upgradeability |
+### Modular Smart Contract Architecture
+- **MerchantRegistry.sol** - Merchant verification and trust scoring
+- **EscrowManager.sol** - Time-lock escrow for buyer protection
+- **RedemptionManager.sol** - Advanced redemption with burn-to-soulbound
+- **NFTFactory.sol** - Enhanced factory with commerce integration
+- **Marketplace.sol** - Tier-certified NFT marketplace with dynamic fees
+- **SubscriptionNFT.sol** - Soulbound NFT representing subscription tiers
+- **FactoryV2.sol** - Upgraded factory with tier-certified deployment
+- **SimpleCollectibleV2.sol** - Enhanced collectible with metadata encoding
+- **CCIPNFTReceiver.sol** - Cross-chain NFT purchase receiver
+- ✅ Upgradeable UUPS proxy pattern for all contracts
 
-#
-> ## Repo Setup
+### Comprehensive Testing & Security
+- ✅ Extensive unit test coverage for all commerce features
+- ✅ Security audits for smart contracts
+- ✅ Reentrancy protection and access control
+- ✅ Pausable mechanisms for emergency situations
+- ✅ Upgrade authorization with multi-signature support
 
-<p align="justify">
-To setup the repo, first fork the Nft-assets Repo, then clone the forked repository to create a copy on the local machine.
-</p>
+---
 
-    $ git clone https://github.com/BukiOffor/Nft-assets
+## Technologies
 
-<p align="justify">
-Change directory to the cloned repo and set the original PrismVox.io repository as the "upstream" and your forked repository as the "origin" using gitbash.
-</p>
+| Technology | Usage |
+|------------|-------|
+| **Solidity 0.8.19+** | Smart contracts with OpenZeppelin upgradeable patterns |
+| **Next.js 14** | Client frontend with App Router |
+| **React 18 + Vite** | Admin panel frontend |
+| **TypeScript** | Type-safe admin backend |
+| **Node.js + Express** | Backend API services |
+| **Hardhat** | Smart contract development and deployment |
+| **OpenZeppelin** | Security standards and upgradeability |
+| **MongoDB + Mongoose** | Database for off-chain data |
+| **IPFS (Pinata)** | Decentralized storage for NFT metadata |
+| **Chainlink CCIP** | Cross-chain interoperability |
+| **Chainlink CRE** | Automated off-chain workflows |
+| **wagmi v2 + Viem** | React hooks for Ethereum interactions |
+| **WalletConnect** | Multi-wallet integration |
 
-    $ git remote add upstream https://github.com/BukiOffor/Nft-assets.git
+---
 
-#
-#
-> ## Requirements
-#
-- Hardhat
-- Alchemy key
-- Metamask key
-- Base Sepolia API Url (https://sepolia.basescan.org/)
-- Node JS
-- TypeScript
-- React/Vite (for admin panel)
-- MongoDB or PostgreSQL (for backend storage)
-- IPFS (for decentralized storage)
-- WalletConnect (for wallet integration)
-- USDC for subscription payments
-#
-> ## Setup the Project
-**`*Note:`**
+## Project Structure
 
-<p align="justify">
-This project was setup on a windows 10 system using the gitbash terminal. Some of the commands used may not work with the VScode terminal, command prompt or powershell.
-</p>
-
-The steps involved are outlined below:-
-
-### Project Structure
-The project consists of multiple components:
-- **client/** - Main frontend application built with Next.js
-- **core/** - Smart contracts and blockchain interactions
-- **server/** - Main backend server
-- **admin-frontend/** - Admin panel frontend built with React/Vite
-- **admin-backend/** - Admin panel backend built with TypeScript
-
-### Installation Steps
-1. Clone the repository
-2. Navigate to each component directory and install dependencies
-3. Configure environment variables
-4. Start each service separately
-#
-> ### Install Hardhat
-The first step involves cloning and installing hardhat.
-```shell
-$ cd core
-
-$ npm i -D hardhat
-
-$ npm install
-
-$ npm install --save-dev "@nomiclabs/hardhat-waffle" "ethereum-waffle" "chai" "@nomiclabs/hardhat-ethers" "ethers" "web3" "@nomiclabs/hardhat-web3" "@nomiclabs/hardhat-etherscan" "@openzeppelin/contracts" "dotenv" "@tenderly/hardhat-tenderly" "hardhat-gas-reporter" "hardhat-deploy"
 ```
-> ### Env Setup
- Next create a `.env` file by using the sample.env. Retrieve your information from the relevant sites and input the information where needed in the `.env` file.
-
-#
-`To retrieve your gnosis key.`
-- Login to [gnosisscan](https://gnosisscan.io/) and hover over the dropdown arrow for your profile on the navbar.
-- Click on API keys and add to create a new project (optional step).
-- Once the project has been created, click on the copy button to copy the API key.
-- Paste it in the .env file
-
-<p align="center" width="100%">
-  <img src="https://github.com/BukiOffor/Nft-assets/assets/58889001/9668a40f-73d2-4fd5-8adf-91059880b69e" alt="gnosis key"/>
-</p>
-
-#
-> ## Setup the Frontend
-- First run the frontend on your local server to ensure it's fully functional before building for production.
-#
-> ### Install Dependencies
-- Setup and install dependencies
-
-```shell
-$ cd client
-
-$ npm install
-
-$ npm run dev
+NFT-Factory/
+├── client/                 # Main Next.js frontend (Base Sepolia NFT marketplace)
+│   ├── src/
+│   │   ├── app/           # Next.js app router pages
+│   │   ├── components/    # Reusable UI components
+│   │   ├── providers/     # Context providers (Web3, Redux)
+│   │   └── utils/         # Utility functions
+│   ├── constants/         # Contract ABIs and addresses
+│   └── public/            # Static assets
+│
+├── core/                  # Smart contracts and blockchain infrastructure
+│   ├── contracts/         # Solidity smart contracts
+│   ├── deploy/            # Deployment scripts
+│   ├── test/              # Contract tests
+│   └── utils/             # Verification utilities
+│
+├── server/                # Main backend server (Node.js + Express)
+│   ├── controller/        # Business logic controllers
+│   ├── models/            # MongoDB schemas
+│   ├── routes/            # API routes
+│   ├── services/          # External service integrations
+│   └── repository/        # Data access layer
+│
+├── admin-frontend/        # Admin dashboard (React + Vite)
+│   ├── src/
+│   │   ├── pages/         # Admin pages
+│   │   ├── components/    # UI components
+│   │   └── hooks/         # Custom React hooks
+│   └── dist/              # Production build
+│
+├── admin-backend/         # Admin API service (TypeScript + Node.js)
+│   ├── src/
+│   │   ├── controllers/   # Admin business logic
+│   │   ├── models/        # Database models
+│   │   ├── routes/        # Admin API routes
+│   │   └── workers/       # Background job processors
+│   └── dist/              # Compiled TypeScript
+│
+├── cre-workflows/         # Chainlink Runtime Environment workflows
+│   └── royalty-distribution/  # Automated royalty distribution
+│
+└── docs/                  # Documentation
+    ├── DEPLOYMENT_GUIDE.md
+    ├── ARCHITECTURE.md
+    └── CHANGELOG.md
 ```
-#> ### Steps to host the live site on Vercel
 
-#### Client Frontend Deployment
-- Create an account on [vercel](https://vercel.com/) and authorize your [GitHub](https://github.com/BukiOffor/Nft-assets/) account.
+---
 
-- Once you're redirected to the Dashboard, click on the drop down menu and select `Add GitHub Org or Account`.
+## Quick Start
 
-- In the pop-up window, select the install option.
+### Prerequisites
+Before you begin, ensure you have:
+- Node.js v18+ installed
+- npm or yarn package manager
+- MetaMask or Coinbase Wallet extension
+- Base Sepolia testnet ETH (from [faucet](https://www.coinbase.com/faucets/base-ethereum-sepolia-faucet))
 
-- Once installation is completed, return to the dashboard and click `new project`.
+### 1. Clone the Repository
 
-- Select the TeamB organization and select the zurischool repo to import the project.
-
-- Enter the relevant details and click `Deploy`.
-
-#### Admin Panel Deployment
-The admin panel consists of two parts:
-- **admin-frontend**: Deploy to Vercel as a separate project
-- **admin-backend**: Deploy to Vercel or other hosting platforms as an API service
-
-#### Server Backend
-- Deploy the server backend to Vercel or other Node.js hosting platforms
-- Ensure proper environment variables are set
-- Connect to database and blockchain services
-
-
-#
-> ## Testing the Smartcontracts
-
-- Coverage is used to view the percentage of the code required by tests and unittests were implemented to ensure that the code functions as expected
-#
-**`Coverage Test`**
-- To test the smartcontracts, first open a terminal and run the following command:
-
-- First install Solidity Coverage
+```bash
+git clone https://github.com/MadefromLight/NFT-Factory.git
+cd NFT-Factory
+git checkout v3-architecture  # Latest stable branch
 ```
-  $ npm i solidity-coverage
-```
-- Add `require('solidity-coverage')` to hardhat.config.json
 
-- Install Ganache
-``` 
-  $ npm i ganache-cli
-``` 
-- Run coverage
-```
-$ npx hardhat coverage --network localhost
+### 2. Install Dependencies
 
-# if you get errors and you want to trace the error in the terminal
-$ npx hardhat coverage --network localhost --show-stack-traces
+Install dependencies for all components:
+
+```bash
+# Install core dependencies
+npm install
+
+# Install client dependencies
+cd client
+npm install --legacy-peer-deps
+
+# Install core contracts
+cd ../core
+npm install
+
+# Install server dependencies
+cd ../server
+npm install
+
+# Install admin frontend dependencies
+cd ../admin-frontend
+npm install
+
+# Install admin backend dependencies
+cd ../admin-backend
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create `.env` files for each component:
+
+**Client (.env.local):**
+```env
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
+NEXT_PUBLIC_ALCHEMY_BASE_SEPOLIA_RPC=https://base-sepolia.g.alchemy.com/v2/YOUR_KEY
+NEXT_PUBLIC_FACTORY_PROXY_ADDRESS=0x211C3c71Aa0Aac76eaA989CA193D03b132358960
+NEXT_PUBLIC_COLLECTION_IMPLEMENTATION=0xA068c85535B4fBF25B959Dcf1187b48fC7BE9Cf0
+NEXT_PUBLIC_SUBSCRIPTION_NFT=0x5ca321ADff3189dB3A0210F58B0e7732c2c4082e
+```
+
+**Core (.env):**
+```env
+PRIVATE_KEY=your_private_key
+ALCHEMY_API_KEY=your_alchemy_key
+BASESCAN_API_KEY=your_basescan_key
+ETHERSCAN_API_KEY=your_etherscan_key
+```
+
+**Server (.env):**
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+PORT=3000
+```
+
+Refer to `.env.example` files in each directory for templates.
+
+### 4. Start Development Servers
+
+Start each service in separate terminals:
+
+```bash
+# Terminal 1: Client Frontend
+cd client
+npm run dev
+
+# Terminal 2: Server Backend
+cd server
+npm run dev
+
+# Terminal 3: Admin Frontend
+cd admin-frontend
+npm run dev
+
+# Terminal 4: Admin Backend
+cd admin-backend
+npm run dev
+```
+
+The application will be available at:
+- Client: http://localhost:3000
+- Admin Frontend: http://localhost:5173
+- Server API: http://localhost:3001
+- Admin Backend: http://localhost:3002
+
+---
+
+## Requirements
+
+### System Requirements
+- **Node.js**: v18 or higher
+- **npm/yarn**: Latest stable version
+- **Git**: For version control
+- **MongoDB**: Atlas cloud database or local instance
+
+### Blockchain Requirements
+- **Wallet**: MetaMask or Coinbase Wallet extension
+- **Network**: Base Sepolia testnet configured
+- **Test Tokens**: 
+  - ETH from [Coinbase Faucet](https://www.coinbase.com/faucets/base-ethereum-sepolia-faucet)
+  - LINK from [Chainlink Faucet](https://faucets.chain.link/base-sepolia)
+
+### API Keys Needed
+- **Alchemy API Key**: [Get here](https://alchemy.com/)
+- **WalletConnect Project ID**: [Get here](https://walletconnect.org/)
+- **BaseScan API Key**: [Get here](https://basescan.io/)
+- **Pinata API Key**: [Get here](https://pinata.cloud/) (for IPFS)
+- **MongoDB Atlas**: [Get here](https://mongodb.com/cloud/atlas)
+
+---
+
+## Installation
+
+### Detailed Installation Steps
+
+#### 1. Client Frontend Setup
+
+```bash
+cd client
+npm install --legacy-peer-deps
+
+# Copy environment template
+cp .env.local.example .env.local
+
+# Edit .env.local with your configuration
+```
+
+#### 2. Smart Contracts Setup
+
+```bash
+cd core
+npm install
+
+# Copy environment template
+cp .env.example .env
+
+# Edit .env with your private key and API keys
+```
+
+#### 3. Server Backend Setup
+
+```bash
+cd server
+npm install
+
+# Create .env file
+cp .env.example .env
+
+# Configure MongoDB and JWT settings
+```
+
+#### 4. Admin Panel Setup
+
+```bash
+# Admin Frontend
+cd admin-frontend
+npm install
+
+# Admin Backend
+cd admin-backend
+npm install
+```
+
+---
+
+## Smart Contracts
+
+### Deployed Contract Addresses (Base Sepolia)
+
+All contracts are deployed and verified on Base Sepolia testnet:
+
+| Contract | Address | Purpose |
+|----------|---------|---------|
+| **Factory Proxy** | `0x211C3c71Aa0Aac76eaA989CA193D03b132358960` | Main factory for deploying NFT collections |
+| **Collection Implementation** | `0xA068c85535B4fBF25B959Dcf1187b48fC7BE9Cf0` | SimpleCollectibleV2 implementation |
+| **SubscriptionNFT** | `0x5ca321ADff3189dB3A0210F58B0e7732c2c4082e` | Subscription system for merchants |
+| **Marketplace** | `0xCE4274c33dB9E32926120E7497d67E4335024a38` | Tier-certified NFT marketplace |
+| **FactoryV2** | `0xe90335369A7cdD7570EF99988DB3ADce85D89055` | Upgraded factory with subscription validation |
+
+**Explorer**: https://sepolia.basescan.org/
+
+### Contract Architecture
+
+The platform uses a modular, upgradeable architecture:
+
+```
+┌─────────────────┐
+│  Factory Proxy  │ → Deploys collection proxies
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ FactoryV2 Impl  │ → Validates subscriptions
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ Collection      │ → ERC-721 NFT with redemption
+│ Proxy (per col) │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│ SimpleCollect-  │ → NFT implementation
+│ ibleV2 Impl     │
+└─────────────────┘
+```
+
+### Key Smart Contracts
+
+1. **FactoryV2.sol**: Deploys tier-certified NFT collections with subscription validation
+2. **SimpleCollectibleV2.sol**: Upgradeable ERC-721 with EIP-2981 royalties and redemption
+3. **SubscriptionNFT.sol**: Soulbound NFTs representing subscription tiers and minting rights
+4. **Marketplace.sol**: Dynamic fee marketplace with tier-based filtering
+5. **MerchantRegistry.sol**: Merchant verification and trust scoring
+6. **EscrowManager.sol**: Time-lock escrow for secure transactions
+7. **RedemptionManager.sol**: Physical/digital asset redemption with soulbound conversion
+8. **CCIPNFTReceiver.sol**: Cross-chain NFT purchase handler via Chainlink CCIP
+
+---
+
+## Testing
+
+### Smart Contract Testing
+
+```bash
+cd core
+
+# Run all tests
+npx hardhat test
+
+# Run specific test file
+npx hardhat test test/Factory.test.js
+
+# Generate gas report
+REPORT_GAS=true npx hardhat test
+
+# Generate coverage report
+npx hardhat coverage --network localhost
 ```
 
 ### Running Tests for New Contracts
-The enhanced platform includes additional smart contracts with their own tests:
 
-- **FactoryV2.sol**: Upgraded factory contract with new features
-- **Marketplace.sol**: Trading functionality for NFTs
-- **SubscriptionNFT.sol**: Subscription-based NFT system
-- **SimpleCollectibleV2.sol**: Enhanced collectible contract
+The enhanced platform includes tests for all commerce features:
 
-To run tests for all contracts:
-```
+- **Factory.test.js**: Factory deployment and collection creation
+- **SimpleCollectible.test.js**: Minting, redemption, royalties
+- **MerchantRegistry.test.js**: Merchant verification workflows
+- **EscrowManager.test.js**: Escrow creation and release
+- **RedemptionManager.test.js**: Redemption lifecycle
+- **SubscriptionNFT.test.js**: Subscription tiers and quotas
+
+---
+
+## Deployment
+
+### Deploy Smart Contracts
+
+1. **Compile contracts**:
+```bash
 cd core
-npx hardhat test
+npx hardhat compile
 ```
 
-To run tests for specific contracts:
+2. **Deploy to Base Sepolia**:
+```bash
+npx hardhat run deploy/01-deploy-factory.js --network baseSepolia
 ```
-npx hardhat test test/Factory.test.js
-npx hardhat test test/SimpleCollectible.test.js
+
+3. **Verify contracts on BaseScan**:
+```bash
+npx hardhat verify --network baseSepolia <CONTRACT_ADDRESS>
 ```
 
-#
-> ## Smart Contract Addresses
+### Deploy Frontend to Vercel
 
-### Current Deployment (Base Sepolia Testnet)
-- Base Sepolia Explorer: https://sepolia.basescan.org/
+#### Option 1: Vercel CLI
 
-### Previous Gnosis Deployment (Legacy)
-- Factory Contract: https://gnosis-chiado.blockscout.com/address/0x950384443e2455E93010BeeC53Fd24e3aaD04C67
+```bash
+cd client
+npm install -g vercel
+vercel login
+vercel --prod
+```
 
-### Transaction Hashes
-- Tx 1: 0x4f60fbb2a2d0c0162c7357ea0fd67492577168690e170d24aeb1fe60fd3afd0c
-- Tx 2: 0x289fe2781066b37e1e211065281f0671dd72e115da9237e7f10b6829b58071d3
+#### Option 2: GitHub Integration
 
-### Updated Contract Deployments
-- FactoryV2 with upgrade capability
-- Marketplace contract for trading
-- SubscriptionNFT contract
-- SimpleCollectibleV2 with enhanced features
-- Deployed on Base Sepolia testnet
+1. Push code to GitHub:
+```bash
+git add .
+git commit -m "Ready for deployment"
+git push origin v3-architecture
+```
 
-### Future Deployment Plans
-- Mainnet deployment coming soon
+2. Go to [Vercel Dashboard](https://vercel.com/new)
+3. Import Git Repository: `MadefromLight/NFT-Factory`
+4. Configure:
+   - Framework Preset: Next.js
+   - Root Directory: `client`
+   - Build Command: `npm run build`
+5. Add environment variables (see `.env.local.example`)
+6. Click Deploy
 
-For latest deployed addresses, check the `core/deployments/` folder
+### Deploy Backend Services
 
+#### Server Backend
 
-# 
+Deploy to Vercel, Railway, or Heroku:
 
-## Useful links
+```bash
+# Vercel
+cd server
+vercel --prod
 
-## View attribution files here
+# Railway
+railway up
+```
 
-https://docs.google.com/document/d/1TXCMG2I1hF8gLAJNjz69bioiZXOVwK0crSlhXWqMDvw/edit?usp=sharing
+#### Admin Panel
 
-## Explainer video (User POV)
+Deploy both frontend and backend separately:
 
-https://github.com/BukiOffor/Nft-assets/assets/58889001/f8eb776e-df15-4eab-aca5-a535430c4e54
+```bash
+# Admin Frontend (Vercel/Netlify)
+cd admin-frontend
+vercel --prod
 
-## Demo Video (Clients POV)
+# Admin Backend (Railway/Heroku)
+cd admin-backend
+railway up
+```
 
-https://github.com/BukiOffor/Nft-assets/assets/58889001/42d9ea71-95ca-4995-be80-9825080295be
+For detailed deployment instructions, see [DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md)
 
+---
 
-- [Frontend Deployment](https://nft-assets-c8r6.vercel.app/)
-- [Figma design](https://www.figma.com/proto/dV2FBUaa7BomJu7JCWjL1Z/Webpage-Redesign?page-id=67%3A823&type=design&node-id=348-3699&viewport=7528%2C-2452%2C0.51&t=6PGceqXUTERPd9EJ-1&scaling=scale-down&starting-point-node-id=348%3A3699&mode=design)
+## Contributing
 
-## New Features & Improvements
+We welcome contributions! Here's how you can help:
 
-### Admin Panel
-- Complete admin dashboard with user management
-- Project submission approval workflow
-- Analytics and monitoring tools
-- Built with React, TypeScript, and Vite
+### How to Contribute
 
-### Launchpad Platform
-- Application system for new projects
-- Onboarding workflow for creators
-- Approval and review processes
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes**
+4. **Test thoroughly**
+5. **Commit your changes**: `git commit -m 'Add amazing feature'`
+6. **Push to the branch**: `git push origin feature/amazing-feature`
+7. **Open a Pull Request**
 
-### Enhanced Smart Contracts
-- Upgradeable contract architecture
-- Subscription NFT functionality
-- Marketplace contract for trading
-- Improved security and gas optimization
+### Contribution Guidelines
 
-### User Experience
-- Enhanced navigation and UI
-- Dashboard for user analytics
-- Collection management tools
-- Subscription system integration
+- Follow existing code style
+- Write meaningful commit messages
+- Add tests for new features
+- Update documentation as needed
+- Ensure linting passes (`npm run lint`)
 
-### Backend Services
-- Node.js server with enhanced APIs
-- Blockchain event listeners
-- Email notification services
-- Admin management APIs
+### Code of Conduct
 
+- Be respectful and inclusive
+- Provide constructive feedback
+- Focus on what's best for the community
 
-> ## Contributors
+---
 
-This Project was created by these awesome dedicated members
+## Support
 
-<p align="center" width="100%">
-  <img src="https://github.com/muhammod1/Nft-factroy/assets/58889001/5702a26d-909a-4c44-a284-2957fcd0879f" alt="teamVox"/>
-</p>
+### Documentation
 
-### Recent Contributors to Enhancements
+- [Architecture Guide](./docs/ARCHITECTURE.md) - Detailed system architecture
+- [Deployment Guide](./docs/DEPLOYMENT_GUIDE.md) - Step-by-step deployment instructions
+- [Changelog](./docs/CHANGELOG.md) - Version history and updates
 
-Special recognition to contributors who have added:
-- Admin panel with React/TypeScript backend
-- Launchpad platform for new projects
-- Advanced smart contract functionality
-- Enhanced user dashboard and management
-- Subscription NFT system
+### Community
 
-#
-> ## Contributing to the project
+- **GitHub Issues**: [Report bugs or request features](https://github.com/MadefromLight/NFT-Factory/issues)
+- **Discord**: [Chainlink Community](https://discord.gg/chainlink)
+- **Email**: abimbola.zeuslabs@gmail.com
 
-If you find something worth contributing, please fork the repo, make a pull request and add valid and well-reasoned explanations about your changes or comments.
+### Resources
 
-Before adding a pull request, please note:
+- [Base Documentation](https://docs.base.org)
+- [Chainlink CCIP Docs](https://docs.chain.link/ccip)
+- [wagmi Documentation](https://wagmi.sh)
+- [Next.js Documentation](https://nextjs.org/docs)
 
-- This is an open source project.
-- Your contributions should be inviting and clear.
-- Any additions should be relevant.
-- New features should be easy to contribute to.
+---
 
-All **`suggestions`** are welcome!
-#
-> ##### README Created by `Enebeli Emmanuel` for Zeus Labs
+## License
 
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+## Acknowledgments
+
+Special thanks to:
+- The Zeus Labs team for initial development
+- All contributors who have enhanced the platform
+- The Base and Chainlink communities for support
+
+---
+
+**Version**: 3.0.0  
+**Last Updated**: March 23, 2026  
+**Status**: Production Ready ✅
