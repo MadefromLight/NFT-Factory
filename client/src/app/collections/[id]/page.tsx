@@ -8,15 +8,7 @@ import { orbitron } from "@/fonts/fonts";
 import { poppins } from "@/fonts/fonts";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import {
-  prepareWriteContract,
-  writeContract,
-  waitForTransaction,
-} from "@wagmi/core";
-
-import {
-  useAccount,
-} from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import { SimpleCollectible } from "../../../../constants";
 import { readFactoryContract, readSimpleCollectibleContract, hasActiveSubscription } from "@/utils";
 import axios from "axios";
@@ -25,6 +17,7 @@ import { parseEther } from "viem";
 
 const Details = () => {
   const { isConnected, address } = useAccount();
+  const { writeContract, data: mintHash, isPending: isMintPending } = useWriteContract();
   const pathName = usePathname();
   const router = useRouter();
   const params = parseFloat(pathName.charAt(pathName.length - 1));
@@ -33,7 +26,6 @@ const Details = () => {
   const [image, setImage] = useState("");
   const [cAddress, setAddress] = useState<`0x${string}`>(
     "0x950384443e2455E93010BeeC53Fd24e3aaD04C67"
-    //"0x74327bBA4Afbbdb553652989E6a2d7D6B9bf31A0"
   );
   const [name, setName] = useState("");
   const [isRedeemed, setIsRedeemed] = useState(false);
@@ -76,44 +68,7 @@ const Details = () => {
     });
   }, []);
 
-  // TODO: Update to wagmi v2 API - use useWriteContract instead
-  // const {
-  //   config,
-  //   error: prepareError,
-  //   isError: isPrepareError,
-  // } = usePrepareContractWrite({
-  //   address: cAddress,
-  //   abi: SimpleCollectible.abi,
-  //   functionName: "createCollectible",
-  //   args: [address, params],
-  //   value: parseEther(String(collection.mintFee * 100)),
-  // });
-  // const { data, error, isError, write } = useContractWrite(config);
-
-  // const { isSuccess } = useWaitForTransaction({
-  //   hash: data?.hash,
-  // });
-  
-  // Temporary mock for demonstration
-  const data = { hash: null };
-  const error = null;
-  const isError = false;
-  const write = () => {};
-  const isSuccess = false;
-
-  useEffect(() => {
-    console.log(String(collection.mintFee * 100), collection.mintFee);
-    if (isSuccess) {
-      toast.dismiss();
-      toast.success("Minted Successfully", { theme: "colored" });
-      router.push("");
-      //setIsRedeemed(true);
-    } else if (isError && collection.mintFee) {
-      toast.error((error as unknown as Error)?.message || "Transaction failed", {
-        theme: "colored",
-      });
-    }
-  }, [isSuccess, isError]);
+  // TODO: Add transaction success handling for wagmi v2\n  // useEffect(() => {\n  //   console.log(String(collection.mintFee * 100), collection.mintFee);\n  //   if (mintSuccess) {\n  //     toast.dismiss();\n  //     toast.success("Transaction successful!", { theme: "colored" });\n  //     router.push("");\n  //     //setIsRedeemed(true);\n  //   } else if (isMintConfirming) {\n  //     toast.info("Transaction confirming...", { theme: "colored" });\n  //   }\n  // }, [mintSuccess, isMintConfirming]);
 
   useEffect(() => {
     async function updateUI() {
@@ -161,7 +116,18 @@ const Details = () => {
       toast.success("Transaction in progress, confirm in wallet", {
         autoClose: false,
       });
-      write?.();
+      
+      try {
+        writeContract({
+          address: cAddress,
+          abi: SimpleCollectible.abi,
+          functionName: "createCollectible",
+          args: [address, params],
+          value: parseEther(String(collection.mintFee * 100)),
+        });
+      } catch (error) {
+        toast.error((error as Error)?.message || "Failed to mint");
+      }
     }
   };
 
@@ -202,27 +168,24 @@ const Details = () => {
         autoClose: false,
       }
     );
-    // write?.();
-    // router.push("/collections/mint");
-    //const tokenId = await prepareCancel();
+    
     const tokenId = await _prepareCancel();
-    const request = await prepareWriteContract({
-      address: "0x9a5CfF1ca498D7f01c14d288F794f0d1093Fd3C1",
-      abi: SimpleCollectible.abi,
-      functionName: "redeem",
-      args: [tokenId, params],
-    });
-    console.log("value is ", request);
-    const { hash } = await writeContract(request);
-    const data = await waitForTransaction({
-      confirmations: 1,
-      hash,
-    });
-    if (data.status == "success") {
+    
+    try {
+      writeContract({
+        address: "0x9a5CfF1ca498D7f01c14d288F794f0d1093Fd3C1",
+        abi: SimpleCollectible.abi,
+        functionName: "redeem",
+        args: [tokenId, params],
+      });
+      
+      // Transaction will be handled by the useEffect below
       toast.dismiss(progress);
-      toast.success(`NFT with Id ${tokenId} was redeemed successfully`);
+      toast.success(`Redeem transaction submitted!`);
+    } catch (error) {
+      toast.dismiss(progress);
+      toast.error((error as Error)?.message || "Transaction failed");
     }
-    console.log("data is ", data);
   };
 
   // State for live collection data

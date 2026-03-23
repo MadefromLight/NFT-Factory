@@ -3,6 +3,8 @@
 // For write operations, use wagmi v2 hooks (useWriteContract, useSimulateContract) directly in components
 
 import { readContract as readContractData } from "@wagmi/core";
+import { createPublicClient, http } from "viem";
+import { baseSepolia } from "wagmi/chains";
 import Factory from "../../constants/Factory.json";
 import SimpleCollectible from "../../constants/SimpleCollectible.json";
 import SubscriptionNFT from "../../constants/SubscriptionNFT.json";
@@ -10,6 +12,12 @@ import Marketplace from "../../constants/Marketplace.json";
 
 // Base Sepolia Chain ID
 const BASE_SEPOLIA_CHAIN_ID = 84532;
+
+// Create public client for reading
+const publicClient = createPublicClient({
+  chain: baseSepolia,
+  transport: http(),
+});
 
 // Tier enum mapping
 export enum SubscriptionTier {
@@ -35,7 +43,7 @@ export const readFactoryContract = async (
     functionName,
     args,
     chainId: BASE_SEPOLIA_CHAIN_ID,
-  } as any);
+  } as any, { publicClient });
 
   return data;
 };

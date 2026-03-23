@@ -24,7 +24,7 @@ const Logo: React.FC<Props> = (props) => {
               sizes="100vw"
               style={{
                 width: "auto",
-                height: height + "px" ?? "auto",
+                height: height ? height + "px" : "auto",
               }}
             />
           );

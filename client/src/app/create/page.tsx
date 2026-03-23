@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAccount, useWriteContract, useWaitForTransaction } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import { parseEther } from "viem";
 import TopNavigation from "@/common/navs/top/TopNavigation";
 import Footer from "@/components/Footer";
@@ -9,7 +9,6 @@ import Footer from "@/components/Footer";
 const CreateCollection = () => {
   const { isConnected } = useAccount();
   const { writeContract, data: hash, isPending } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransaction({ hash });
   const [txHash, setTxHash] = useState<string>("");
   const [formData, setFormData] = useState({
     name: "",
@@ -21,9 +20,8 @@ const CreateCollection = () => {
   });
 
   // Load contract ABI and address dynamically to avoid TypeScript issues
-  // const Factory = typeof window !== 'undefined' ? require("../../constants/Factory.json") : null;
-  const Factory = { address: null, abi: [] }; // Stub for build
-  const loading = isPending || isConfirming;
+  const Factory = { address: "0x211C3c71Aa0Aac76eaA989CA193D03b132358960" as `0x${string}`, abi: [] }; // Use deployed Factory address
+  const loading = isPending;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

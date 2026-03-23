@@ -20,10 +20,8 @@ import GetStarted from "@/components/Forms/GetStarted";
 import TeamInformationForm from "@/components/Forms/TeamInformation";
 import { useDebounce } from "use-debounce";
 import {
-  usePrepareContractWrite,
-  useContractWrite,
-  useWaitForTransaction,
   useAccount,
+  useWriteContract,
 } from "wagmi";
 import ArtworkDetailsForm from "@/components/Forms/ArtworkDetails";
 import Minting from "@/components/Forms/Minting";
@@ -133,46 +131,8 @@ const Apply: React.FC = () => {
     };
   }, [walletAddress, currentPage, hasSubscription]);
 
-  const {
-    config,
-    error: prepareError,
-    isError: isPrepareError,
-  } = usePrepareContractWrite({
-    address: Factory.address as `0x${string}`,
-    abi: Factory.abi,
-    functionName: "deployWithSubscription",
-    args: [
-      debouncedTitle[0] || "My Collection",
-      debouncedTitle[0] === "string"
-        ? String(debouncedTitle).substring(0, 3).toUpperCase()
-        : "NFT",
-      // This should be the metadata, but since they can't specify details of each NFT, we use existing
-      [
-        "https://bafybeib4eyyxb5j2mugwzr4fmr2vd2wyqb4hrsj5w42xyb7frdcae5nusa.ipfs.dweb.link/1.json",
-        "https://bafybeifzlqzt7jdzrfdr44sxbcpiuya6tf3dic3ghikhktlyogr3qfxkze.ipfs.dweb.link/2.json",
-        "https://bafybeieamp53yjixpvq6h26zf5qmycohspmec2hjky5ufucslunivjrbc4.ipfs.dweb.link/3.json",
-      ],
-      // They should be able to set the prices for the various NFTs, but for now, one for all
-      [
-        debouncedPrice[0]
-          ? parseEther(String(parseFloat(debouncedPrice[0]) / 100))
-          : 0,
-        debouncedPrice[0]
-          ? parseEther(String(parseFloat(debouncedPrice[0]) / 100))
-          : 0,
-        debouncedPrice[0]
-          ? parseEther(String(parseFloat(debouncedPrice[0]) / 100))
-          : 0,
-      ],
-      selectedTier,
-    ],
-    enabled: hasSubscription && !!debouncedTitle[0],
-  });
-  const { data, error, isError, write } = useContractWrite(config);
-
-  const { isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
-  });
+  const { writeContract, data: deployHash, isPending, error } = useWriteContract();
+  // TODO: Add transaction monitoring for wagmi v2 - isSuccess and isConfirming variables removed
   const [confirm, setConfirm] = useState<boolean>(false);
 
   /**
@@ -243,8 +203,9 @@ const Apply: React.FC = () => {
     }
   };
 
+  // TODO: Add transaction success handling for wagmi v2 - monitor deployHash
   useEffect(() => {
-    if (isSuccess) {
+    if (deployHash) {
       const requestBody = {
         ...project,
         ...team,
@@ -265,12 +226,9 @@ const Apply: React.FC = () => {
           toast.error(message, { theme: "colored" });
           setLoading(false);
         });
-    } else if (isPrepareError || isError) {
-      toast.error(prepareError?.message || error?.message, {
-        theme: "colored",
-      });
     }
-  }, [isSuccess, isError, isPrepareError]);
+    // TODO: Add error handling for wagmi v2
+  }, [deployHash]);
 
   /**
    * Function to toggle the confirmation state.

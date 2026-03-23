@@ -3,20 +3,33 @@ import TopNavigation from "@/common/navs/top/TopNavigation";
 import React, { useState, useEffect } from "react";
 import Footer from "@/components/Footer";
 import Button from "@/common/Button";
-import { useAccount } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import { toast } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 import {
   SubscriptionTier,
   hasActiveSubscription,
   getTierPricing,
-  mintSubscription,
   getUserSubscription,
   getUSDCAllowance,
-  approveUSDC,
 } from "@/utils";
 import { SubscriptionNFT } from "../../../constants";
-import { parseEther } from "viem";
+import { parseEther, parseUnits } from "viem";
+
+// Minimal USDC ABI for approve function
+const USDC_ABI = [{
+  "inputs": [
+    { "internalType": "address", "name": "spender", "type": "address" },
+    { "internalType": "uint256", "name": "amount", "type": "uint256" }
+  ],
+  "name": "approve",
+  "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+  "stateMutability": "nonpayable",
+  "type": "function"
+}] as const;
+
+// USDC address on Base Sepolia
+const USDC_ADDRESS = "0x036CbD53842c5426634e7929541eC2318F3dCF7e";
 
 interface TierInfo {
   tier: SubscriptionTier;
@@ -72,6 +85,9 @@ const tierData: TierInfo[] = [
 
 const SubscriptionPage: React.FC = () => {
   const { address: walletAddress } = useAccount();
+  const { writeContract: approveUSDC, data: approveHash } = useWriteContract();
+  const { writeContract: mintSubscription, data: mintHash } = useWriteContract();
+  // TODO: Add transaction monitoring for wagmi v2\n  // const { isSuccess: approveSuccess } = useWaitForTransaction({ hash: approveHash });\n  // const { isSuccess: mintSuccess } = useWaitForTransaction({ hash: mintHash });
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
   const [hasSubscription, setHasSubscription] = useState(false);
@@ -153,14 +169,20 @@ const SubscriptionPage: React.FC = () => {
       const price = tierPrices[selectedTier];
       // Approve a large amount so user doesn't have to approve again
       const approveAmount = price * BigInt(10);
-      const hash = await approveUSDC(
-        SubscriptionNFT.address as `0x${string}`,
-        approveAmount
-      );
-      toast.success(`USDC approved! Transaction: ${hash}`, {
+      
+      approveUSDC({
+        address: USDC_ADDRESS,
+        abi: USDC_ABI,
+        functionName: 'approve',
+        args: [
+          SubscriptionNFT.address as `0x${string}`,
+          approveAmount
+        ]
+      });
+      
+      toast.success(`USDC approval submitted!`, {
         theme: "colored",
       });
-      setNeedsApproval(false);
     } catch (err: any) {
       console.error("Error approving USDC:", err);
       toast.error(err?.message || "Failed to approve USDC", {
@@ -178,13 +200,24 @@ const SubscriptionPage: React.FC = () => {
 
     setLoading(true);
     try {
-      // Note: User needs to approve USDC spending first
-      // This is a simplified version - in production, you'd check USDC allowance first
-      const hash = await mintSubscription(selectedTier);
-      toast.success(`Subscription minted! Transaction: ${hash}`, {
+      const price = tierPrices[selectedTier];
+      if (!price) {
+        toast.error("Price not loaded");
+        setLoading(false);
+        return;
+      }
+      
+      mintSubscription({
+        address: SubscriptionNFT.address as `0x${string}`,
+        abi: SubscriptionNFT.abi,
+        functionName: 'mintSubscription',
+        args: [selectedTier],
+        value: price
+      });
+      
+      toast.success(`Subscription mint transaction submitted!`, {
         theme: "colored",
       });
-      await checkSubscriptionStatus();
     } catch (err: any) {
       console.error("Error minting subscription:", err);
       toast.error(
