@@ -42,7 +42,11 @@ vercel --prod
    ```env
    NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=d53916a1cd392d59c255e0b115c9d442
    NEXT_PUBLIC_ALCHEMY_BASE_SEPOLIA_RPC=https://base-sepolia.g.alchemy.com/v2/KgTV8U-VkMAe7rYR_0ltT
-   NEXT_PUBLIC_FACTORY_PROXY_ADDRESS=0x...  # Add after contract deployment
+   
+   # ✅ Contracts Already Deployed on Base Sepolia!
+   NEXT_PUBLIC_FACTORY_PROXY_ADDRESS=0x211C3c71Aa0Aac76eaA989CA193D03b132358960
+   NEXT_PUBLIC_COLLECTION_IMPLEMENTATION=0xA068c85535B4fBF25B959Dcf1187b48fC7BE9Cf0
+   NEXT_PUBLIC_SUBSCRIPTION_NFT=0x5ca321ADff3189dB3A0210F58B0e7732c2c4082e
    ```
 
 4. **Deploy**
@@ -70,6 +74,10 @@ vercel --prod
    - Affects: collections/[id]/page.tsx, launchpad/apply/page.tsx
    - These pages need wagmi v2 migration
    - Doesn't block wallet connection or core functionality
+
+3. Factory import stub in create/page.tsx
+   - Contract addresses now configured in .env.local and constants/*.json
+   - Create page uses stub for build compatibility
 ```
 
 ---
@@ -125,17 +133,23 @@ git push
 **Check these in order:**
 1. Browser console for errors
 2. Network tab for failed RPC calls
-3. Verify WalletConnect project ID is valid
+3. Verify WalletConnect project ID is valid: `d53916a1cd392d59c255e0b115c9d442`
 4. Check Base Sepolia RPC endpoint is accessible
 5. Ensure wallet extension is installed and unlocked
+6. Verify contract addresses are correct:
+   - Factory Proxy: `0x211C3c71Aa0Aac76eaA989CA193D03b132358960`
+   - SubscriptionNFT: `0x5ca321ADff3189dB3A0210F58B0e7732c2c4082e`
 
 ### Connected But Can't Interact
 
 **Possible issues:**
 - Wrong network (should be Base Sepolia)
 - Insufficient testnet ETH
-- Contract addresses not configured
-- Check `.env.local` values
+- ✅ Contract addresses ARE configured correctly:
+  - Factory Proxy: `0x211C3c71Aa0Aac76eaA989CA193D03b132358960`
+  - Collection Implementation: `0xA068c85535B4fBF25B959Dcf1187b48fC7BE9Cf0`
+  - SubscriptionNFT: `0x5ca321ADff3189dB3A0210F58B0e7732c2c4082e`
+- Check `.env.local` values match deployed contracts
 
 ---
 
